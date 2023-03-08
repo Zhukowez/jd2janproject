@@ -1,0 +1,58 @@
+<web-app id="WebApp_ID" version="2.4"
+         xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+   http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+    <servlet>
+        <servlet-name>MainServlet</servlet-name>
+        <servlet-class>com.zhukowez.controller.FrontController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MainServlet</servlet-name>
+        <url-pattern>/FrontController</url-pattern>
+    </servlet-mapping>
+
+    <!--    localhost:8080/application/FrontController-->
+    <!--    https://kalevich.com/application/FrontController-->
+
+    <servlet>
+        <servlet-name>HelloWeb</servlet-name>
+        <jsp-file>/WEB-INF/jsp/hello.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HelloWeb</servlet-name>
+        <url-pattern>/hello</url-pattern>
+    </servlet-mapping>
+
+    <!--    localhost:8080/application/hello-->
+
+    <servlet>
+        <servlet-name>ByeByeWeb</servlet-name>
+        <jsp-file>/WEB-INF/jsp/bye.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ByeByeWeb</servlet-name>
+        <url-pattern>/bye</url-pattern>
+    </servlet-mapping>
+    
+    <listener>
+        <listener-class>com.zhukowez.listeners.StartupCustomListener</listener-class>
+    </listener>
+
+    <filter>
+        <filter-name>CharsetFilter</filter-name>
+        <filter-class>com.zhukowez.filters.CharsetFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>CharsetFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!--    localhost:8080/application/bye-->
+    <session-config>
+        <session-timeout>10</session-timeout>
+    </session-config>
+
+</web-app>
