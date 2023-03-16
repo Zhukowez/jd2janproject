@@ -6,17 +6,21 @@ import java.util.List;
 
 public interface AthleteRepository extends CRUDRepository<Long, Athlete> {
 
+    List<Athlete> findAll();
+
+    Athlete findOne(Long id);
+
+
     Athlete findById(Long id);
 
-    List<Athlete> findAllAthletesByHeight();
-
-
-    List<Athlete> findAllAthletesByWeight();
+    Athlete update(Athlete athlete);
 
     List<Athlete> findAllAthletesByHeight(double height);
 
-    List<Athlete> findAllAthletesByWeight(Double weight);
+
+    List<Athlete> findAllAthletesByWeight(double weight);
+
+    List<Athlete> findAthletesByNameAndSurname(String name, String surname);
 
     void searchAthlete();
-
 }

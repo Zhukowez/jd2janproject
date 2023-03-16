@@ -13,16 +13,6 @@ public class LoggingAspect {
 
     private static final Logger log = Logger.getLogger(LoggingAspect.class);
 
-//    @Before("aroundRepositoryPointcut()")
-//    public void logBefore(JoinPoint joinPoint) {
-//        log.info("Method " + joinPoint.getSignature().getName() + " start");
-//    }
-//
-//    @AfterReturning(pointcut = "aroundRepositoryPointcut()")
-//    public void doAccessCheck(JoinPoint joinPoint) {
-//        log.info("Method " + joinPoint.getSignature().getName() + " finished");
-//    }
-
     @Pointcut("execution(* com.zhukowez.repository.*.*.*(..))")
     public void aroundRepositoryPointcut() {
     }

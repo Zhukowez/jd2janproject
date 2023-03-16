@@ -5,7 +5,6 @@ import com.zhukowez.domain.Athlete;
 import com.zhukowez.repository.impl.AthleteRepositoryImpl;
 import com.zhukowez.service.AthleteService;
 import com.zhukowez.service.AthleteServiceImpl;
-import com.zhukowez.util.RandomValuesGenerator;
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,7 +22,7 @@ import java.util.stream.Collectors;
 public class FrontController extends HttpServlet {
 
     @Autowired
-    private final AthleteService athleteService = new AthleteServiceImpl(new AthleteRepositoryImpl(new DatabaseProperties()), new RandomValuesGenerator());
+    private final AthleteService athleteService = new AthleteServiceImpl(new AthleteRepositoryImpl(new DatabaseProperties()));
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

@@ -5,6 +5,13 @@ import com.zhukowez.domain.Athlete;
 import java.util.List;
 
 public interface AthleteService {
+
+    
+
+
+
+    Athlete findById(Long id);
+
     Athlete findOne(Long id);
 
     List<Athlete> findAll();
@@ -14,4 +21,6 @@ public interface AthleteService {
     Athlete update(Athlete object);
 
     void delete(Long id);
+
+
 }
