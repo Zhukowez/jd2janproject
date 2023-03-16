@@ -6,9 +6,6 @@ import java.util.List;
 
 public interface AthleteService {
 
-    
-
-
 
     Athlete findById(Long id);
 

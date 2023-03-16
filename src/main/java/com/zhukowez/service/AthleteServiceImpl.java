@@ -28,6 +28,7 @@ public class AthleteServiceImpl implements AthleteService {
             }
         }
     }
+
     @Override
     public Athlete findById(Long id) {
         return athleteRepository.findById(id);

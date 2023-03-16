@@ -7,18 +7,18 @@ import org.springframework.stereotype.Component;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import static com.zhukowez.repository.columns.AthleteColumns.BIRTH_DATE;
+import static com.zhukowez.repository.columns.AthleteColumns.CHANGED;
+import static com.zhukowez.repository.columns.AthleteColumns.CREATED;
+import static com.zhukowez.repository.columns.AthleteColumns.DELETED;
+import static com.zhukowez.repository.columns.AthleteColumns.EMAIL;
+import static com.zhukowez.repository.columns.AthleteColumns.HEIGHT;
 import static com.zhukowez.repository.columns.AthleteColumns.ID;
 import static com.zhukowez.repository.columns.AthleteColumns.NAME;
+import static com.zhukowez.repository.columns.AthleteColumns.PHONE_NUMBER;
+import static com.zhukowez.repository.columns.AthleteColumns.ROLE_ID;
 import static com.zhukowez.repository.columns.AthleteColumns.SURNAME;
 import static com.zhukowez.repository.columns.AthleteColumns.WEIGHT;
-import static com.zhukowez.repository.columns.AthleteColumns.BIRTH_DATE;
-import static com.zhukowez.repository.columns.AthleteColumns.HEIGHT;
-import static com.zhukowez.repository.columns.AthleteColumns.EMAIL;
-import static com.zhukowez.repository.columns.AthleteColumns.PHONE_NUMBER;
-import static com.zhukowez.repository.columns.AthleteColumns.CREATED;
-import static com.zhukowez.repository.columns.AthleteColumns.CHANGED;
-import static com.zhukowez.repository.columns.AthleteColumns.DELETED;
-import static com.zhukowez.repository.columns.AthleteColumns.ROLE_ID;
 
 @Component
 public class AthleteRowMapper implements RowMapper<Athlete> {

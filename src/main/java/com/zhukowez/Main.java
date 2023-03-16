@@ -4,14 +4,11 @@ import com.zhukowez.aspect.MethodInvocationCounterAspect;
 import com.zhukowez.configuration.ApplicationConfig;
 import com.zhukowez.domain.Athlete;
 import com.zhukowez.repository.AthleteRepository;
-import com.zhukowez.repository.impl.AthleteRepositoryImpl;
-import com.zhukowez.service.AthleteService;
 import com.zhukowez.service.AthleteServiceImpl;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 
 
@@ -22,7 +19,7 @@ public class Main {
         ApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfig.class);
         AthleteRepository athleteRepository = context.getBean(AthleteRepository.class);
 
-        // Найти атлета с идентификатором 1
+        // Найти атлета с идентификатором
         Long athleteId = 3L;
         Athlete athlete = athleteRepository.findOne(athleteId);
 
@@ -95,7 +92,6 @@ public class Main {
         String nameToSearch = "Имя";
         String surnameToSearch = "Фамилия";
         athleteNameSurname.searchAthlete(nameToSearch, surnameToSearch);
-
 
 
         MethodInvocationCounterAspect methodInvocationCounterAspect = context.getBean(MethodInvocationCounterAspect.class);

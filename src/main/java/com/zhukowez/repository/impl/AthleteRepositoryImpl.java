@@ -4,13 +4,12 @@ import com.zhukowez.configuration.DatabaseProperties;
 import com.zhukowez.domain.Athlete;
 import com.zhukowez.repository.AthleteRepository;
 import lombok.RequiredArgsConstructor;
-    import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -22,18 +21,18 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.zhukowez.repository.columns.AthleteColumns.BIRTH_DATE;
+import static com.zhukowez.repository.columns.AthleteColumns.CHANGED;
+import static com.zhukowez.repository.columns.AthleteColumns.CREATED;
+import static com.zhukowez.repository.columns.AthleteColumns.DELETED;
+import static com.zhukowez.repository.columns.AthleteColumns.EMAIL;
+import static com.zhukowez.repository.columns.AthleteColumns.HEIGHT;
 import static com.zhukowez.repository.columns.AthleteColumns.ID;
 import static com.zhukowez.repository.columns.AthleteColumns.NAME;
+import static com.zhukowez.repository.columns.AthleteColumns.PHONE_NUMBER;
+import static com.zhukowez.repository.columns.AthleteColumns.ROLE_ID;
 import static com.zhukowez.repository.columns.AthleteColumns.SURNAME;
 import static com.zhukowez.repository.columns.AthleteColumns.WEIGHT;
-import static com.zhukowez.repository.columns.AthleteColumns.BIRTH_DATE;
-import static com.zhukowez.repository.columns.AthleteColumns.HEIGHT;
-import static com.zhukowez.repository.columns.AthleteColumns.EMAIL;
-import static com.zhukowez.repository.columns.AthleteColumns.PHONE_NUMBER;
-import static com.zhukowez.repository.columns.AthleteColumns.CREATED;
-import static com.zhukowez.repository.columns.AthleteColumns.CHANGED;
-import static com.zhukowez.repository.columns.AthleteColumns.DELETED;
-import static com.zhukowez.repository.columns.AthleteColumns.ROLE_ID;
 
 
 @Repository
@@ -45,7 +44,7 @@ public class AthleteRepositoryImpl implements AthleteRepository {
     private static final Logger LOGGER = Logger.getLogger(AthleteRepository.class.getName());
     private final static String INSERT_ATHLETES_FIRST_TO_DB_QUERY = "INSERT INTO m_athletes (name, surname, " +
             "birth_date, height, weight, e_mail, phone_number, created, changed, is_deleted, role_ID) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String CHANGE_ATHLETE_STATUS_QUERY = "UPDATE m_athletes SET is_deleted = ? WHERE id_athlete = ?";
     private static final String UPDATE_ATHLETE_QUERY = "UPDATE m_athletes SET name = ?, surname = ?, birth_date = ?, height = ?, weight = ?, " +
             "e_mail = ?, phone_number = ?, created = ?, changed = ?, is_deleted = ?, role_id = ? WHERE id_athlete = ?";
@@ -131,7 +130,6 @@ public class AthleteRepositoryImpl implements AthleteRepository {
     }
 
 
-
     private Connection getConnection() {
         String jdbcURL = StringUtils.join(properties.getUrl(), properties.getPort(), properties.getName());
         try {
@@ -168,30 +166,6 @@ public class AthleteRepositoryImpl implements AthleteRepository {
 
     @Override
     public Athlete findById(Long id) {
-        /*final String findByIdQuery = "select * from m_athlete where id = " + id;
-        registerDriver();
-        List<Athlete> list = new ArrayList<>();
-
-        Connection connection;
-        PreparedStatement preparedStatement;
-        ResultSet resultSet;
-
-        try {
-            connection = getConnection();
-            preparedStatement = connection.prepareStatement(findByIdQuery);
-            resultSet = preparedStatement.executeQuery(findByIdQuery);
-
-            while (resultSet.next()) {
-                list.add(parseResultSet(resultSet));
-            }
-        } catch (SQLException e) {
-            LOGGER.error("DB connection process issues", e);
-            throw new RuntimeException(e);
-        }
-        if (list.size() > 1) {
-            LOGGER.error("non-unique id");
-        }
-        return list.get(0);*/
         return findOne(id);
     }
 

@@ -15,18 +15,18 @@ import java.sql.Timestamp;
 @Builder
 public class Athlete {
 
-   private Long id;
-   private String name;
-   private String surname;
-   private Timestamp birthDate;
-   private Double height;
-   private Double weight;
-   private String email;
-   private String phoneNumber;
-   private Timestamp created;
-   private Timestamp changed;
-   private Boolean deleted;
-   private Long roleID;
+    private Long id;
+    private String name;
+    private String surname;
+    private Timestamp birthDate;
+    private Double height;
+    private Double weight;
+    private String email;
+    private String phoneNumber;
+    private Timestamp created;
+    private Timestamp changed;
+    private Boolean deleted;
+    private Long roleID;
 
     public Athlete(String name, String surname, Timestamp birthDate, Double height, Double weight,
                    String email, String phoneNumber) {
@@ -38,6 +38,7 @@ public class Athlete {
         this.email = email;
         this.phoneNumber = phoneNumber;
     }
+
     public Athlete(String name, String surname, Timestamp birthDate, Double height, Double weight,
                    String email, String phoneNumber, Timestamp created, Timestamp changed, Boolean deleted) {
         this.name = name;
