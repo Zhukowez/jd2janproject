@@ -3,13 +3,23 @@ package com.zhukowez.repository;
 import com.zhukowez.domain.Athlete;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AthleteRepository extends CRUDRepository<Long, Athlete> {
 
-    List<Athlete> findAll();
+    void delete(Long id);
 
+    Athlete update(Athlete athlete);
+
+    List<Athlete> searchAthlete(String searchQuery);
     Athlete findOne(Long id);
+    List<Athlete> findAll();
+    List<Athlete> findAthletesByNameAndSurname(String name, String surname);
+    Optional<Athlete> findById(Long id);
+    Athlete create(Athlete athlete);
 
+
+    /*List<Athlete> findAll();
 
     Athlete findById(Long id);
 
@@ -20,7 +30,9 @@ public interface AthleteRepository extends CRUDRepository<Long, Athlete> {
 
     List<Athlete> findAllAthletesByWeight(double weight);
 
-    List<Athlete> findAthletesByNameAndSurname(String name, String surname);
+    */
 
-    void searchAthlete();
+    //void searchAthlete();
+
+
 }

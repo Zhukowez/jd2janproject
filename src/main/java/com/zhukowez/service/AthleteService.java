@@ -4,6 +4,7 @@ import com.zhukowez.domain.Athlete;
 
 import java.util.List;
 
+
 public interface AthleteService {
 
 

@@ -1,5 +1,6 @@
 package com.zhukowez;
 
+import com.zhukowez.aspect.MethodInvocationCounterAspect;
 import com.zhukowez.repository.AthleteRepository;
 import com.zhukowez.service.AthleteService;
 import com.zhukowez.util.RandomValuesGenerator;
@@ -21,5 +22,9 @@ public class SpringTest {
         logger.info(athleteRepository.findOne(1L));
         logger.info(athleteService.findAll());
         logger.info(randomValuesGenerator.generateRandomString());
+
+        MethodInvocationCounterAspect methodInvocationCounterAspect = applicationContext.getBean(MethodInvocationCounterAspect.class);
+        // Call printMethodInvocationCounts() to print the method invocation counts
+        methodInvocationCounterAspect.printMethodInvocationCounts();
     }
 }

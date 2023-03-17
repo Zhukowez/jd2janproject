@@ -2,12 +2,16 @@ package com.zhukowez;
 
 import com.zhukowez.aspect.MethodInvocationCounterAspect;
 import com.zhukowez.configuration.ApplicationConfig;
+import com.zhukowez.configuration.DatabaseProperties;
 import com.zhukowez.domain.Athlete;
 import com.zhukowez.repository.AthleteRepository;
+import com.zhukowez.repository.impl.AthleteRepositoryImpl;
+import com.zhukowez.repository.rowmapper.AthleteRowMapper;
 import com.zhukowez.service.AthleteServiceImpl;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import javax.sql.DataSource;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -16,7 +20,64 @@ public class Main {
 
     public static void main(String[] args) {
 
+
         ApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfig.class);
+        AthleteRepository athleteRepository = context.getBean(AthleteRepository.class);
+
+        // Создание атлета
+        Athlete newAthlete = Athlete.builder()
+                .name("Имя")
+                .surname("Фамилия")
+                .birthDate(new Timestamp(System.currentTimeMillis()))
+                .height(170.0)
+                .weight(70.0)
+                .email("example@example.com")
+                .phoneNumber("+123456789")
+                .created(new Timestamp(System.currentTimeMillis()))
+                .changed(new Timestamp(System.currentTimeMillis()))
+                .deleted(false)
+                .roleID(1L)
+                .build();
+
+        Athlete createdAthlete = athleteRepository.create(newAthlete);
+        System.out.println("Создан атлет с ID: " + createdAthlete.getId());
+
+        // Чтение атлета
+        Long athleteId = createdAthlete.getId();
+        Athlete athlete = athleteRepository.findOne(athleteId);
+
+        if (athlete != null) {
+            System.out.println("ID: " + athlete.getId() + ", Имя: " + athlete.getName() + ", Фамилия: " + athlete.getSurname());
+        } else {
+            System.out.println("Атлет с ID " + athleteId + " не найден.");
+        }
+
+        // Обновление атлета
+        Athlete athleteToUpdate = athleteRepository.findOne(athleteId);
+        if (athleteToUpdate != null) {
+            athleteToUpdate.setName("Новое имя");
+            athleteToUpdate.setSurname("Новая фамилия");
+
+            Athlete updatedAthlete = athleteRepository.update(athleteToUpdate);
+            System.out.println("Атлет обновлен: ID: " + updatedAthlete.getId() + ", Имя: " + updatedAthlete.getName() + ", Фамилия: " + updatedAthlete.getSurname());
+        } else {
+            System.out.println("Атлет с ID " + athleteId + " не найден.");
+        }
+
+        // Удаление атлета
+        athleteRepository.delete(athleteId);
+        System.out.println("Атлет с ID " + athleteId + " удален.");
+
+
+
+        List<Athlete> all = athleteRepository.findAll();
+
+        for (Athlete user : all) {
+            System.out.println(user);
+        }
+
+        //AthleteRepository athleteRepository = new AthleteRepositoryImpl(new DatabaseProperties());
+        /*ApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfig.class);
         AthleteRepository athleteRepository = context.getBean(AthleteRepository.class);
 
         // Найти атлета с идентификатором
@@ -92,12 +153,8 @@ public class Main {
         String nameToSearch = "Имя";
         String surnameToSearch = "Фамилия";
         athleteNameSurname.searchAthlete(nameToSearch, surnameToSearch);
+*/
 
 
-        MethodInvocationCounterAspect methodInvocationCounterAspect = context.getBean(MethodInvocationCounterAspect.class);
-
-
-        // Call printMethodInvocationCounts() to print the method invocation counts
-        methodInvocationCounterAspect.printMethodInvocationCounts();
     }
 }

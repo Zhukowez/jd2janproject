@@ -4,6 +4,7 @@ import com.zhukowez.domain.Athlete;
 import com.zhukowez.repository.AthleteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import javax.persistence.EntityNotFoundException;
 
 import java.util.List;
 
@@ -31,7 +32,8 @@ public class AthleteServiceImpl implements AthleteService {
 
     @Override
     public Athlete findById(Long id) {
-        return athleteRepository.findById(id);
+        return athleteRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Athlete not found with id: " + id));
     }
 
 

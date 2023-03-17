@@ -14,6 +14,7 @@ public class AthleteAggServiceImpl implements AthleteAggregationService {
     private AthleteRepository athleteRepository;
 
     public AthleteAggServiceImpl(AthleteRepository athleteRepository) {
+
         this.athleteRepository = athleteRepository;
     }
 
@@ -23,7 +24,7 @@ public class AthleteAggServiceImpl implements AthleteAggregationService {
 
         List<Athlete> athletes = athleteRepository.findAll();
         Athlete one = athleteRepository.findOne(2L);
-        athleteRepository.searchAthlete();
+        athleteRepository.searchAthlete("searchString");
 
         Map<String, Object> resultMap = new HashMap<>();
 
@@ -32,4 +33,6 @@ public class AthleteAggServiceImpl implements AthleteAggregationService {
 
         return resultMap;
     }
+
+
 }

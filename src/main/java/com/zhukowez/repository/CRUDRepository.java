@@ -5,7 +5,7 @@ import java.util.List;
 public interface CRUDRepository<K, T> {
 
 
-    T findOne(K id); //
+/*    T findOne(K id); //
 
     List<T> findAll();
 
@@ -13,5 +13,5 @@ public interface CRUDRepository<K, T> {
 
     T update(T object);
 
-    void delete(K id);
+    void delete(K id);*/
 }

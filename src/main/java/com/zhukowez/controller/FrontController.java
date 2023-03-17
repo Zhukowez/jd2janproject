@@ -1,10 +1,7 @@
 package com.zhukowez.controller;
 
-import com.zhukowez.configuration.DatabaseProperties;
 import com.zhukowez.domain.Athlete;
-import com.zhukowez.repository.impl.AthleteRepositoryImpl;
 import com.zhukowez.service.AthleteService;
-import com.zhukowez.service.AthleteServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -21,20 +18,14 @@ import java.util.stream.Collectors;
 @Controller
 public class FrontController extends HttpServlet {
 
+    private final AthleteService athleteService;
+
     @Autowired
-    private final AthleteService athleteService = new AthleteServiceImpl(new AthleteRepositoryImpl(new DatabaseProperties()));
-
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doRequest(req, resp);
+    public FrontController(AthleteService athleteService) {
+        this.athleteService = athleteService;
     }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doRequest(req, resp);
-    }
-
-    private void doRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         RequestDispatcher dispatcher = req.getRequestDispatcher("/hello");
         if (dispatcher != null) {
             System.out.println("Forward will be done!");
@@ -50,4 +41,16 @@ public class FrontController extends HttpServlet {
             dispatcher.forward(req, resp);
         }
     }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doRequest(req, resp);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doRequest(req, resp);
+    }
+
+
 }

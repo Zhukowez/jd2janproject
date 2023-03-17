@@ -1,54 +1,134 @@
 package com.zhukowez.repository.impl;
 
-import com.zhukowez.configuration.DatabaseProperties;
 import com.zhukowez.domain.Athlete;
 import com.zhukowez.repository.AthleteRepository;
+import com.zhukowez.repository.rowmapper.AthleteRowMapper;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.context.annotation.Primary;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
-
-import static com.zhukowez.repository.columns.AthleteColumns.BIRTH_DATE;
-import static com.zhukowez.repository.columns.AthleteColumns.CHANGED;
-import static com.zhukowez.repository.columns.AthleteColumns.CREATED;
-import static com.zhukowez.repository.columns.AthleteColumns.DELETED;
-import static com.zhukowez.repository.columns.AthleteColumns.EMAIL;
-import static com.zhukowez.repository.columns.AthleteColumns.HEIGHT;
-import static com.zhukowez.repository.columns.AthleteColumns.ID;
-import static com.zhukowez.repository.columns.AthleteColumns.NAME;
-import static com.zhukowez.repository.columns.AthleteColumns.PHONE_NUMBER;
-import static com.zhukowez.repository.columns.AthleteColumns.ROLE_ID;
-import static com.zhukowez.repository.columns.AthleteColumns.SURNAME;
-import static com.zhukowez.repository.columns.AthleteColumns.WEIGHT;
+import java.util.Optional;
 
 
 @Repository
-@RequiredArgsConstructor
 @Primary
-
+@Component
+@RequiredArgsConstructor
 public class AthleteRepositoryImpl implements AthleteRepository {
 
-    private static final Logger LOGGER = Logger.getLogger(AthleteRepository.class.getName());
+    private final JdbcTemplate jdbcTemplate;
+    private final AthleteRowMapper athleteRowMapper;
+
+/*    public AthleteRepositoryImpl(DataSource dataSource, AthleteRowMapper athleteRowMapper) {
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
+        this.athleteRowMapper = athleteRowMapper;
+    }*/
+
+
+    @Override
+    public Athlete create(Athlete athlete) {
+        String sql = "INSERT INTO m_athletes (name, surname, birth_date, weight, height, e_mail, phone_number, created, changed, is_deleted, role_id) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id_athlete";
+        Long id = jdbcTemplate.queryForObject(sql, Long.class,
+                athlete.getName(),
+                athlete.getSurname(),
+                athlete.getBirthDate(),
+                athlete.getWeight(),
+                athlete.getHeight(),
+                athlete.getEmail(),
+                athlete.getPhoneNumber(),
+                athlete.getCreated(),
+                athlete.getChanged(),
+                athlete.getDeleted(),
+                athlete.getRoleID());
+        athlete.setId(id);
+        return athlete;
+    }
+
+    @Override
+    public Athlete findOne(Long id) {
+        String sql = "SELECT * FROM m_athletes WHERE id_athlete = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, athleteRowMapper, id);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public List<Athlete> findAll() {
+        String sql = "SELECT * FROM m_athletes";
+        return jdbcTemplate.query(sql, athleteRowMapper);
+    }
+
+    @Override
+    public Optional<Athlete> findById(Long id) {
+        String sql = "SELECT * FROM m_athletes WHERE id_athlete = ?";
+        try {
+            Athlete athlete = jdbcTemplate.queryForObject(sql, athleteRowMapper, id);
+            return Optional.ofNullable(athlete);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public List<Athlete> findAthletesByNameAndSurname(String name, String surname) {
+        String sql = "SELECT * FROM m_athletes WHERE name = ? AND surname = ?";
+        return jdbcTemplate.query(sql, athleteRowMapper, name, surname);
+    }
+
+
+
+    @Override
+    public void delete(Long id) {
+        String sql = "DELETE FROM m_athletes WHERE id_athlete = ?";
+        jdbcTemplate.update(sql, id);
+    }
+
+    @Override
+    public Athlete update(Athlete athlete) {
+        String sql = "UPDATE m_athletes SET name = ?, surname = ?, birth_date = ?, weight = ?, height = ?, e_mail = ?, phone_number = ?, created = ?, changed = ?, is_deleted = ?, role_id = ? WHERE id_athlete = ?";
+
+        jdbcTemplate.update(sql,
+                athlete.getName(),
+                athlete.getSurname(),
+                athlete.getBirthDate(),
+                athlete.getWeight(),
+                athlete.getHeight(),
+                athlete.getEmail(),
+                athlete.getPhoneNumber(),
+                athlete.getCreated(),
+                athlete.getChanged(),
+                athlete.getDeleted(),
+                athlete.getRoleID(),
+                athlete.getId());
+
+        return findOne(athlete.getId());
+    }
+
+
+
+    @Override
+    public List<Athlete> searchAthlete(String searchQuery) {
+        String sql = "SELECT * FROM m_athletes WHERE LOWER(name) LIKE LOWER(?) OR LOWER(surname) LIKE LOWER(?);";
+        String query = "%" + searchQuery + "%";
+        return jdbcTemplate.query(sql, athleteRowMapper, query, query);
+    }
+
+
+
+    /*private static final Logger LOGGER = Logger.getLogger(AthleteRepository.class.getName());
     private final static String INSERT_ATHLETES_FIRST_TO_DB_QUERY = "INSERT INTO m_athletes (name, surname, " +
             "birth_date, height, weight, e_mail, phone_number, created, changed, is_deleted, role_ID) " +
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String CHANGE_ATHLETE_STATUS_QUERY = "UPDATE m_athletes SET is_deleted = ? WHERE id_athlete = ?";
     private static final String UPDATE_ATHLETE_QUERY = "UPDATE m_athletes SET name = ?, surname = ?, birth_date = ?, height = ?, weight = ?, " +
             "e_mail = ?, phone_number = ?, created = ?, changed = ?, is_deleted = ?, role_id = ? WHERE id_athlete = ?";
-    private final DatabaseProperties properties;
 
     private final Logger logger = Logger.getLogger(AthleteRepositoryImpl.class);
 
@@ -58,6 +138,15 @@ public class AthleteRepositoryImpl implements AthleteRepository {
         } catch (ClassNotFoundException e) {
             System.err.println("JDBC Driver Cannot be loaded!");
             throw new RuntimeException("JDBC Driver Cannot be loaded!");
+        }
+    }
+
+    private Connection getConnection() {
+        String jdbcURL = StringUtils.join(properties.getUrl(), properties.getPort(), properties.getName());
+        try {
+            return DriverManager.getConnection(jdbcURL, properties.getLogin(), properties.getPassword());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -130,38 +219,15 @@ public class AthleteRepositoryImpl implements AthleteRepository {
     }
 
 
-    private Connection getConnection() {
-        String jdbcURL = StringUtils.join(properties.getUrl(), properties.getPort(), properties.getName());
-        try {
-            return DriverManager.getConnection(jdbcURL, properties.getLogin(), properties.getPassword());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     @Override
     public Athlete findOne(Long id) {
-        final String findOneQuery = "SELECT * FROM m_athletes WHERE id_athlete = ?";
-
-        Athlete athlete = null;
-
-        registerDriver();
-        try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(findOneQuery)) {
-
-            statement.setLong(1, id);
-
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    athlete = parseResultSet(resultSet);
-                }
-            }
-
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException("SQL Issues!");
+        String sql = "SELECT * FROM m_athletes WHERE id = ? AND is_deleted = false";
+        RowMapper<Athlete> rowMapper = (rs, rowNum) -> mapAthlete(rs);
+        try {
+            return jdbcTemplate.queryForObject(sql, rowMapper, id);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
         }
-        return athlete;
     }
 
     @Override
@@ -339,11 +405,5 @@ public class AthleteRepositoryImpl implements AthleteRepository {
         }
         return athletes;
     }
-
-    @Override
-    public void searchAthlete() {
-
-    }
-
-
+*/
 }
