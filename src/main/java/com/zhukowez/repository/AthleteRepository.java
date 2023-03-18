@@ -12,27 +12,21 @@ public interface AthleteRepository extends CRUDRepository<Long, Athlete> {
     Athlete update(Athlete athlete);
 
     List<Athlete> searchAthlete(String searchQuery);
+
     Athlete findOne(Long id);
+
     List<Athlete> findAll();
+
     List<Athlete> findAthletesByNameAndSurname(String name, String surname);
+
     Optional<Athlete> findById(Long id);
+
     Athlete create(Athlete athlete);
 
 
-    /*List<Athlete> findAll();
+    List<Athlete> findAthletesOlderThan(int age);
 
-    Athlete findById(Long id);
-
-    Athlete update(Athlete athlete);
-
-    List<Athlete> findAllAthletesByHeight(double height);
-
-
-    List<Athlete> findAllAthletesByWeight(double weight);
-
-    */
-
-    //void searchAthlete();
+    void updateEmail(int id, String email);
 
 
 }
