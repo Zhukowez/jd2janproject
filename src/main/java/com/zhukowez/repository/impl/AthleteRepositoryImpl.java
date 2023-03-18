@@ -23,7 +23,6 @@ public class AthleteRepositoryImpl implements AthleteRepository {
     private final JdbcTemplate jdbcTemplate;
     private final AthleteRowMapper athleteRowMapper;
 
-
     @Override
     public Athlete create(Athlete athlete) {
         String sql = "INSERT INTO m_athletes (name, surname, birth_date, weight, height, e_mail, phone_number, created, changed, is_deleted, role_id) " +
@@ -72,19 +71,6 @@ public class AthleteRepositoryImpl implements AthleteRepository {
     }
 
     @Override
-    public List<Athlete> findAthletesByNameAndSurname(String name, String surname) {
-        String sql = "SELECT * FROM m_athletes WHERE name = ? AND surname = ?";
-        return jdbcTemplate.query(sql, athleteRowMapper, name, surname);
-    }
-
-
-    @Override
-    public void delete(Long id) {
-        String sql = "DELETE FROM m_athletes WHERE id_athlete = ?";
-        jdbcTemplate.update(sql, id);
-    }
-
-    @Override
     public Athlete update(Athlete athlete) {
         String sql = "UPDATE m_athletes SET name = ?, surname = ?, birth_date = ?, weight = ?, height = ?, e_mail = ?, phone_number = ?, created = ?, changed = ?, is_deleted = ?, role_id = ? WHERE id_athlete = ?";
 
@@ -102,17 +88,21 @@ public class AthleteRepositoryImpl implements AthleteRepository {
                 athlete.getRoleID(),
                 athlete.getId());
 
-        return findOne(athlete.getId());
+        return athlete;
     }
 
-
     @Override
-    public List<Athlete> searchAthlete(String searchQuery) {
+    public List<Athlete> searchAthlete(String searchQuery, Double weight) {
         String sql = "SELECT * FROM m_athletes WHERE LOWER(name) LIKE LOWER(?) OR LOWER(surname) LIKE LOWER(?);";
         String query = "%" + searchQuery + "%";
         return jdbcTemplate.query(sql, athleteRowMapper, query, query);
     }
 
+    @Override
+    public List<Athlete> findAthletesByNameAndSurname(String name, String surname) {
+        String sql = "SELECT * FROM m_athletes WHERE name = ? AND surname = ?";
+        return jdbcTemplate.query(sql, athleteRowMapper, name, surname);
+    }
 
     public List<Athlete> findAthletesOlderThan(int age) {
         String sql = "SELECT * FROM get_athletes_older_than(?);";
@@ -127,11 +117,20 @@ public class AthleteRepositoryImpl implements AthleteRepository {
         });
     }
 
+    @Override
+    public void delete(Long id) {
+        String sql = "DELETE FROM m_athletes WHERE id_athlete = ?";
+        jdbcTemplate.update(sql, id);
+    }
 
     @Override
     public void updateEmail(int id, String email) {
         jdbcTemplate.update("CALL update_athlete_email(?, ?)", id, email);
     }
 
+    @Override
+    public boolean support(String param) {
+        return param.equalsIgnoreCase("jdbctemplate");
+    }
 
 }

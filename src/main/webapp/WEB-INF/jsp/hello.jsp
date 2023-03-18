@@ -24,7 +24,6 @@ ${userName}
             <td>User Name</td>
             <td>User Surname</td>
             <td>Birth date</td>
-            <td>Full Name</td>
             <td>Weight</td>
             <td>Edit</td>
             <td>Delete</td>
@@ -35,7 +34,6 @@ ${userName}
                 <td>${athlete.name}</td>
                 <td>${athlete.surname}</td>
                 <td>${athlete.birthDate}</td>
-                <td>${athlete.fullName}</td>
                 <td>${athlete.weight}</td>
                 <td><button>Edit</button></td>
                 <td><button>Delete</button></td>

@@ -3,11 +3,13 @@ package com.zhukowez.service;
 import com.zhukowez.domain.Athlete;
 import com.zhukowez.repository.AthleteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class AthleteAggServiceImpl implements AthleteAggregationService {
 
     @Autowired
@@ -24,7 +26,7 @@ public class AthleteAggServiceImpl implements AthleteAggregationService {
 
         List<Athlete> athletes = athleteRepository.findAll();
         Athlete one = athleteRepository.findOne(2L);
-        athleteRepository.searchAthlete("searchString");
+       // athleteRepository.searchAthlete("searchString", weight);
 
         Map<String, Object> resultMap = new HashMap<>();
 

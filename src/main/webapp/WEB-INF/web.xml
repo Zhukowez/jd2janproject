@@ -6,17 +6,18 @@
 
     <servlet>
         <servlet-name>MainServlet</servlet-name>
-        <servlet-class>com.zhukowez.controller.FrontController</servlet-class>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>MainServlet</servlet-name>
-        <url-pattern>/FrontController</url-pattern>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
 
     <!--    localhost:8080/application/FrontController-->
     <!--    https://kalevich.com/application/FrontController-->
 
-    <servlet>
+    <!--<servlet>
         <servlet-name>HelloWeb</servlet-name>
         <jsp-file>/WEB-INF/jsp/hello.jsp</jsp-file>
     </servlet>
@@ -25,7 +26,7 @@
         <url-pattern>/hello</url-pattern>
     </servlet-mapping>
 
-    <!--    localhost:8080/application/hello-->
+    &lt;!&ndash;    localhost:8080/application/hello&ndash;&gt;
 
     <servlet>
         <servlet-name>ByeByeWeb</servlet-name>
@@ -48,7 +49,7 @@
     <filter-mapping>
         <filter-name>CharsetFilter</filter-name>
         <url-pattern>/*</url-pattern>
-    </filter-mapping>
+    </filter-mapping>-->
 
     <!--    localhost:8080/application/bye-->
     <session-config>

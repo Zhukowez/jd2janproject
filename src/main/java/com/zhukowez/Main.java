@@ -7,13 +7,15 @@ import com.zhukowez.domain.Athlete;
 import com.zhukowez.repository.AthleteRepository;
 import com.zhukowez.repository.impl.AthleteRepositoryImpl;
 import com.zhukowez.repository.rowmapper.AthleteRowMapper;
+import com.zhukowez.service.AthleteAggregationService;
+import com.zhukowez.service.AthleteService;
 import com.zhukowez.service.AthleteServiceImpl;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import javax.sql.DataSource;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -24,6 +26,8 @@ public class Main {
 
         ApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfig.class);
         AthleteRepository athleteRepository = context.getBean(AthleteRepository.class);
+        AthleteService athleteService = context.getBean(AthleteService.class);
+        AthleteAggregationService athleteAggregationService = context.getBean(AthleteAggregationService.class);
 
         // Создание атлета
         Athlete newAthlete = Athlete.builder()
@@ -94,6 +98,14 @@ public class Main {
         System.out.println("Updated athlete: " + updatedAthlete);
         System.out.println("//////////////////////////////////////////////");
 
+        // Проверка метода searchAthlete
+        athleteService.searchAthlete("Имя", "Фамилия");
+
+        // Проверка метода getStats из AthleteAggregationService
+        Map<String, Object> stats = athleteAggregationService.getStats();
+        System.out.println("Статистика атлетов:");
+        System.out.println("Все атлеты: " + stats.get("allAthletes"));
+        System.out.println("Один атлет: " + stats.get("oneAthlete"));
 
     }
 }

@@ -63,6 +63,12 @@ public class AthleteServiceImpl implements AthleteService {
 
     @Override
     public void delete(Long id) {
-
     }
+
+    @Override
+    public List<Athlete> search(String query, Double weight) {
+        return athleteRepository.searchAthlete(query.toLowerCase(), weight);
+    }
+
+
 }

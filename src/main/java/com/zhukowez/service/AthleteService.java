@@ -21,4 +21,7 @@ public interface AthleteService {
     void delete(Long id);
 
 
+    void searchAthlete(String name, String surname);
+
+    List<Athlete> search(String query, Double weight);
 }

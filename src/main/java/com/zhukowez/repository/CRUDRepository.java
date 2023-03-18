@@ -5,13 +5,13 @@ import java.util.List;
 public interface CRUDRepository<K, T> {
 
 
-/*    T findOne(K id); //
+    T create(T object);
+
+    T findOne(K id); //
 
     List<T> findAll();
 
-    T create(T object);
-
     T update(T object);
 
-    void delete(K id);*/
+    void delete(K id);
 }

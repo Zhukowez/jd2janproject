@@ -2,8 +2,11 @@ package com.zhukowez.controller;
 
 import com.zhukowez.domain.Athlete;
 import com.zhukowez.service.AthleteService;
-import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,6 +19,27 @@ import java.util.stream.Collectors;
 
 
 @Controller
+public class FrontController {
+
+    private final AthleteService athleteService;
+
+    @Autowired
+    public FrontController(AthleteService athleteService) {
+        this.athleteService = athleteService;
+    }
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String doRequest(Model model) {
+        List<Athlete> athletes = athleteService.findAll();
+        String collect = athletes.stream().map(Athlete::getName).collect(Collectors.joining(","));
+        model.addAttribute("athleteName", collect);
+        model.addAttribute("athletes", athletes);
+        return "hello";
+    }
+}
+
+
+/*@Controller
 public class FrontController extends HttpServlet {
 
     private final AthleteService athleteService;
@@ -35,8 +59,8 @@ public class FrontController extends HttpServlet {
 
             String collect = athletes.stream().map(Athlete::getName).collect(Collectors.joining(","));
 
-            req.setAttribute("userName", collect);
-            req.setAttribute("users", athletes);
+            req.setAttribute("athleteName", collect);
+            req.setAttribute("athletes", athletes);
 
             dispatcher.forward(req, resp);
         }
@@ -53,4 +77,4 @@ public class FrontController extends HttpServlet {
     }
 
 
-}
+}*/
